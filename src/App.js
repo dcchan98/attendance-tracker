@@ -21,11 +21,19 @@ function App() {
     event.preventDefault();
     event.stopPropagation();
     const file = event.dataTransfer.files[0];
-    Tesseract.recognize(file)
-      .then(({ data: { text } }) => {
-        setText(text);
-      })
-      .catch(err => console.error(err));
+    if (file.type === 'text/plain' || file.type === '') {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setText(e.target.result);
+      };
+      reader.readAsText(file);
+    } else if (file.type.startsWith('image/')) {
+      Tesseract.recognize(file)
+        .then(({ data: { text } }) => {
+          setText(text);
+        })
+        .catch(err => console.error(err));
+    }
   };
 
   const onDragOver = (event) => {
