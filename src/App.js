@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Tesseract from 'tesseract.js';
 import './App.css';
 
@@ -7,10 +7,6 @@ function App() {
   const [rightText, setRightText] = useState('');
   const [result, setResult] = useState([]);
   const [extraAttendees, setExtraAttendees] = useState([]);
-
-  useEffect(() => {
-    calculateDifference();
-  }, [leftText, rightText]);
 
   const calculateDifference = () => {
     const leftNames = leftText.split('\n').filter(name => name.trim());
@@ -53,14 +49,20 @@ function App() {
         <textarea
           placeholder="Enter full strength names here"
           value={leftText}
-          onChange={e => setLeftText(e.target.value)}
+          onChange={e => {
+            setLeftText(e.target.value);
+            calculateDifference();
+          }}
           onDrop={e => onDrop(e, setLeftText)}
           onDragOver={onDragOver}
         />
         <textarea
           placeholder="Enter attended names here"
           value={rightText}
-          onChange={e => setRightText(e.target.value)}
+          onChange={e => {
+            setRightText(e.target.value);
+            calculateDifference();
+          }}
           onDrop={e => onDrop(e, setRightText)}
           onDragOver={onDragOver}
         />
@@ -92,7 +94,7 @@ function App() {
       <div className="extra-attendees">
         <p>Attendees not in the full strength list:</p>
         <ul>
-          {extraAttendees.map(name => (
+        {extraAttendees.map(name => (
             <li key={name}>{name}</li>
           ))}
         </ul>
@@ -100,5 +102,4 @@ function App() {
     </div>
   );
 }
-
 export default App;
