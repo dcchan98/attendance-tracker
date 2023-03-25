@@ -6,12 +6,15 @@ function App() {
   const [leftText, setLeftText] = useState('');
   const [rightText, setRightText] = useState('');
   const [result, setResult] = useState([]);
+  const [extraAttendees, setExtraAttendees] = useState([]);
 
   const calculateDifference = () => {
-    const leftNames = leftText.split('\n');
-    const rightNames = rightText.split('\n');
+    const leftNames = leftText.split('\n').filter(name => name.trim());
+    const rightNames = rightText.split('\n').filter(name => name.trim());
     const difference = leftNames.filter(name => !rightNames.includes(name));
+    const extra = rightNames.filter(name => !leftNames.includes(name));
     setResult(difference);
+    setExtraAttendees(extra);
   };
 
   const onDrop = (event, setText) => {
@@ -29,8 +32,8 @@ function App() {
     event.preventDefault();
   };
 
-  const leftNames = leftText.split('\n');
-  const rightNames = rightText.split('\n');
+  const leftNames = leftText.split('\n').filter(name => name.trim());
+  const rightNames = rightText.split('\n').filter(name => name.trim());
 
   return (
     <div className="App">
@@ -71,6 +74,14 @@ function App() {
         <p>Names not in attendance:</p>
         <ul>
           {result.map(name => (
+            <li key={name}>{name}</li>
+          ))}
+        </ul>
+      </div>
+      <div className="extra-attendees">
+        <p>Attendees not in the full strength list:</p>
+        <ul>
+          {extraAttendees.map(name => (
             <li key={name}>{name}</li>
           ))}
         </ul>
