@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Tesseract from 'tesseract.js';
 import './App.css';
 
@@ -7,6 +7,10 @@ function App() {
   const [rightText, setRightText] = useState('');
   const [result, setResult] = useState([]);
   const [extraAttendees, setExtraAttendees] = useState([]);
+
+  useEffect(() => {
+    calculateDifference();
+  }, [leftText, rightText]);
 
   const calculateDifference = () => {
     const leftNames = leftText.split('\n').filter(name => name.trim());
@@ -61,7 +65,6 @@ function App() {
           onDragOver={onDragOver}
         />
       </div>
-      <button onClick={calculateDifference}>Calculate Difference</button>
       <table className="info">
         <thead>
           <tr>

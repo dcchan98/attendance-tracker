@@ -67,4 +67,10 @@ table.info td {
 
 table.info th {
   font-weight: bold;
+  color: #1DB954;
+}
+
+.result p,
+.extra-attendees p {
+  color: #1DB954;
 }
