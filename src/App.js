@@ -1,23 +1,60 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
 function App() {
+  const [leftText, setLeftText] = useState('');
+  const [rightText, setRightText] = useState('');
+  const [result, setResult] = useState([]);
+
+  const calculateDifference = () => {
+    const leftNames = leftText.split('\n');
+    const rightNames = rightText.split('\n');
+    const difference = leftNames.filter(name => !rightNames.includes(name));
+    setResult(difference);
+  };
+
+  const leftNames = leftText.split('\n');
+  const rightNames = rightText.split('\n');
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="inputs">
+        <textarea
+          placeholder="Enter full strength names here"
+          value={leftText}
+          onChange={e => setLeftText(e.target.value)}
+        />
+        <textarea
+          placeholder="Enter attended names here"
+          value={rightText}
+          onChange={e => setRightText(e.target.value)}
+        />
+      </div>
+      <button onClick={calculateDifference}>Calculate Difference</button>
+      <table className="info">
+        <thead>
+          <tr>
+            <th>Full strength size</th>
+            <th>Current attendance size</th>
+            <th>Number of missing attendees</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{leftNames.length}</td>
+            <td>{rightNames.length}</td>
+            <td>{result.length}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div className="result">
+        <p>Names not in attendance:</p>
+        <ul>
+          {result.map(name => (
+            <li key={name}>{name}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
