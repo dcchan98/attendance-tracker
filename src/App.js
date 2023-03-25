@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Tesseract from 'tesseract.js';
 import './App.css';
 
 function App() {
@@ -13,6 +14,21 @@ function App() {
     setResult(difference);
   };
 
+  const onDrop = (event, setText) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const file = event.dataTransfer.files[0];
+    Tesseract.recognize(file)
+      .then(({ data: { text } }) => {
+        setText(text);
+      })
+      .catch(err => console.error(err));
+  };
+
+  const onDragOver = (event) => {
+    event.preventDefault();
+  };
+
   const leftNames = leftText.split('\n');
   const rightNames = rightText.split('\n');
 
@@ -23,11 +39,15 @@ function App() {
           placeholder="Enter full strength names here"
           value={leftText}
           onChange={e => setLeftText(e.target.value)}
+          onDrop={e => onDrop(e, setLeftText)}
+          onDragOver={onDragOver}
         />
         <textarea
           placeholder="Enter attended names here"
           value={rightText}
           onChange={e => setRightText(e.target.value)}
+          onDrop={e => onDrop(e, setRightText)}
+          onDragOver={onDragOver}
         />
       </div>
       <button onClick={calculateDifference}>Calculate Difference</button>
